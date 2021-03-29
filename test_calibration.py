@@ -26,7 +26,10 @@ for model in models:
         max_probs = []
         cors = []
         for i in range(df.shape[0]):
-            probs = [df["{}_choice{}_probs".format(model, choice)][i] for choice in ["A", "B", "C", "D"]]
+            probs = [
+                df["{}_choice{}_probs".format(model, choice)][i]
+                for choice in ["A", "B", "C", "D"]
+            ]
             cors.append(int(df["{}_correct".format(model)][i]))
             max_probs.append(np.max(probs))
         all_max_probs += max_probs
@@ -37,7 +40,11 @@ for model in models:
     avg_max_prob = np.mean(all_max_probs)
     acc = np.mean(all_cors)
     rms_ce = rmsce(np.array(all_cors), np.array(all_max_probs))
-    print("{} overall conf: {:.3f}, acc: {:.3f}, RMS: {:.3f}".format(model, avg_max_prob, acc, rms_ce))
+    print(
+        "{} overall conf: {:.3f}, acc: {:.3f}, RMS: {:.3f}".format(
+            model, avg_max_prob, acc, rms_ce
+        )
+    )
 
     plt.scatter(all_confs, all_accs)
     min = np.minimum(np.min(all_confs), np.min(all_accs))
@@ -48,4 +55,3 @@ for model in models:
     plt.xlabel("Confidence")
     plt.ylabel("Accuracy")
     plt.savefig("{}_calibration".format(model))
-
